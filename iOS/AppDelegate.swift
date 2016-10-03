@@ -1,11 +1,3 @@
-//
-//  AppDelegate.swift
-//  Snaga
-//
-//  Created by Clayton McIlrath on 9/29/16.
-//  Copyright © 2016 Unicorn. All rights reserved.
-//
-
 import UIKit
 
 @UIApplicationMain

@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:Snaga.xcodeproj">
+      location = "self:/Users/clay/Projects/Snaga/Sprinkles.xcodeproj">
    </FileRef>
 </Workspace>
