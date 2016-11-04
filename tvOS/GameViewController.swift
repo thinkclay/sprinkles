@@ -1,35 +1,35 @@
-//
-//  GameViewController.swift
-//  tvOS
-//
-//  Created by Clayton McIlrath on 9/29/16.
-//  Copyright © 2016 Unicorn. All rights reserved.
-//
-
 import UIKit
 import SpriteKit
-import GameplayKit
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController
+{
+  
+  var scene: GameScene!
+  var panPointReference: CGPoint?
+  
+  @IBOutlet var scoreLabel: UILabel!
+  @IBOutlet var levelLabel: UILabel!
+  
+  override func viewDidLoad()
+  {
+    super.viewDidLoad()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        let scene = GameScene.newGameScene()
-        
-        // Present the scene
-        let skView = self.view as! SKView
-        skView.presentScene(scene)
-        
-        skView.ignoresSiblingOrder = true
-        
-        skView.showsFPS = true
-        skView.showsNodeCount = true
-    }
+    // Configure the view.
+    let skView = view as! SKView
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Release any cached data, images, etc that aren't in use.
-    }
-
+    // Create and configure the scene.
+    scene = GameScene(size: skView.bounds.size)
+    scene.scaleMode = .aspectFill
+    
+    skView.presentScene(scene)
+    
+    let tap = UITapGestureRecognizer(target: self, action: #selector(didTap))
+    tap.delegate = self
+    skView.addGestureRecognizer(tap)
+    
+    let pan = UIPanGestureRecognizer(target: self, action: #selector(didPan(_:)))
+    pan.delegate = self
+    skView.addGestureRecognizer(pan)
+  }
+  
 }

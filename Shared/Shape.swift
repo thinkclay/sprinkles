@@ -142,25 +142,30 @@ class Shape: Hashable, CustomStringConvertible
   
   final func lowerShapeByOneRow()
   {
-    shiftBy(0, rows:1)
+    shiftBy(columns: 0, rows:1)
   }
   
   final func raiseShapeByOneRow()
   {
-    shiftBy(0, rows:-1)
-  }
-  
-  final func shiftRightByOneColumn()
-  {
-    shiftBy(1, rows:0)
+    shiftBy(columns: 0, rows: -1)
   }
   
   final func shiftLeftByOneColumn()
   {
-    shiftBy(-1, rows:0)
+    shiftBy(columns: -1, rows: 0)
   }
   
-  final func shiftBy(_ columns: Int, rows: Int)
+  final func shiftRightByOneColumn()
+  {
+    shiftBy(columns: 1, rows: 0)
+  }
+  
+  final func shiftDownByOneColumn()
+  {
+    shiftBy(columns: 0, rows: 1)
+  }
+  
+  final func shiftBy(columns: Int, rows: Int)
   {
     self.column += columns
     self.row += rows

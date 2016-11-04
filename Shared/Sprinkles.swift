@@ -9,12 +9,12 @@ let LevelThreshold = 500
 
 protocol SprinklesDelegate
 {
-  func gameDidEnd(_ sprinkles: Sprinkles)
-  func gameDidBegin(_ sprinkles: Sprinkles)
-  func gameShapeDidLand(_ sprinkles: Sprinkles)
-  func gameShapeDidMove(_ sprinkles: Sprinkles)
-  func gameShapeDidDrop(_ sprinkles: Sprinkles)
-  func gameDidLevelUp(_ sprinkles: Sprinkles)
+  func gameDidEnd(sprinkles: Sprinkles)
+  func gameDidBegin(sprinkles: Sprinkles)
+  func gameShapeDidLand(sprinkles: Sprinkles)
+  func gameShapeDidMove(sprinkles: Sprinkles)
+  func gameShapeDidDrop(sprinkles: Sprinkles)
+  func gameDidLevelUp(sprinkles: Sprinkles)
 }
 
 class Sprinkles
@@ -40,7 +40,7 @@ class Sprinkles
       nextShape = Shape.random(PreviewColumn, startingRow: PreviewRow)
     }
     
-    delegate?.gameDidBegin(self)
+    delegate?.gameDidBegin(sprinkles: self)
   }
   
   func newShape() -> (fallingShape:Shape?, nextShape:Shape?)
@@ -91,7 +91,7 @@ class Sprinkles
     }
     
     fallingShape = nil
-    delegate?.gameShapeDidLand(self)
+    delegate?.gameShapeDidLand(sprinkles: self)
   }
   
   
@@ -116,7 +116,7 @@ class Sprinkles
   {
     score = 0
     level = 1
-    delegate?.gameDidEnd(self)
+    delegate?.gameDidEnd(sprinkles: self)
   }
   
   func removeAllBlocks() -> Array<Array<Block>>
@@ -178,7 +178,7 @@ class Sprinkles
     
     if score >= level * LevelThreshold {
       level += 1
-      delegate?.gameDidLevelUp(self)
+      delegate?.gameDidLevelUp(sprinkles: self)
     }
     
     var fallenBlocks = Array<Array<Block>>()
@@ -225,7 +225,7 @@ class Sprinkles
     }
     
     shape.raiseShapeByOneRow()
-    delegate?.gameShapeDidDrop(self)
+    delegate?.gameShapeDidDrop(sprinkles: self)
   }
   
   func letShapeFall()
@@ -247,7 +247,7 @@ class Sprinkles
       }
     }
     else {
-      delegate?.gameShapeDidMove(self)
+      delegate?.gameShapeDidMove(sprinkles: self)
       
       if detectTouch() {
         settleShape()
@@ -268,7 +268,7 @@ class Sprinkles
       return
     }
     
-    delegate?.gameShapeDidMove(self)
+    delegate?.gameShapeDidMove(sprinkles: self)
   }
   
   
@@ -285,7 +285,7 @@ class Sprinkles
       return
     }
     
-    delegate?.gameShapeDidMove(self)
+    delegate?.gameShapeDidMove(sprinkles: self)
   }
   
   func moveShapeRight()
@@ -300,6 +300,23 @@ class Sprinkles
       return
     }
     
-    delegate?.gameShapeDidMove(self)
+    delegate?.gameShapeDidMove(sprinkles: self)
   }
+  
+  func moveShapeDown()
+  {
+    guard let shape = fallingShape else {
+      return
+    }
+    
+    shape.shiftDownByOneColumn()
+    
+    guard detectIllegalPlacement() == false else {
+      shape.shiftDownByOneColumn()
+      return
+    }
+    
+    delegate?.gameShapeDidMove(sprinkles: self)
+  }
+  
 }

@@ -2,7 +2,7 @@ import Cocoa
 import SpriteKit
 import GameplayKit
 
-class GameViewController: NSViewController, SprinklesDelegate
+class GameViewController: NSViewController
 {
   
   var scene: GameScene!
@@ -12,21 +12,14 @@ class GameViewController: NSViewController, SprinklesDelegate
   {
     super.viewDidLoad()
     
+    // Configure the view.
     let skView = view as! SKView
+    
+    // Create and configure the scene.
     scene = GameScene(size: skView.bounds.size)
     scene.scaleMode = .aspectFill
     
-    //        let scene = GameScene.newGameScene()
-    //
-    //        // Present the scene
-    //        let skView = self.view as! SKView
-    //        skView.presentScene(scene)
-    //
-    //        skView.ignoresSiblingOrder = true
-    //
-    //        skView.showsFPS = true
-    //        skView.showsNodeCount = true
+    skView.presentScene(scene)
   }
   
 }
-

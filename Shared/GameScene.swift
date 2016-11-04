@@ -13,8 +13,9 @@ var RemainderOffset = CGFloat(0)
 
 let TickLengthLevelOne = TimeInterval(600)
 
-class GameScene: SKScene
+class GameScene: SKScene, SprinklesDelegate
 {
+  var sprinkles: Sprinkles!
   let gameLayer = SKSpriteNode()
   let shapeLayer = SKNode()
   var LayerPosition = CGPoint(x: 0, y: 0)
@@ -23,12 +24,13 @@ class GameScene: SKScene
   var tickLengthMillis = TickLengthLevelOne
   var lastTick: Date?
   
-  var textureCache = Dictionary<String, SKTexture>()
+  // Working with gestures
+  var touchStartPoint: CGPoint?
+  var touchMoved: Bool = false
+  let minSwipeDistance: CGFloat = BlockSize * 0.9
   
-  override init(size: CGSize)
-  {
-    super.init(size: size)
-    
+  override func didMove(to view: SKView)
+  {    
     anchorPoint = CGPoint(x: 0, y: 1.0)
     
     let background = SKSpriteNode(imageNamed: "background")
@@ -44,21 +46,23 @@ class GameScene: SKScene
     gameLayer.position = CGPoint(x: Padding, y: -(2 * Padding) + RemainderOffset)
     addChild(gameLayer)
     
-    BlockSize = floor(gameLayer.size.width / CGFloat(NumColumns))
-    NumRows = round(gameLayer.size.height / BlockSize)
+    BlockSize = (gameLayer.size.width / CGFloat(NumColumns)).rounded(.down)
+    NumRows = (gameLayer.size.height / BlockSize).rounded()
     
-    print(scene!.size.width)    
-    
-    if scene!.size.width <= 320.0 {
+    if scene!.size.width <= 320.0
+    {
       LayerPosition = CGPoint(x: 7, y: 1)
     }
-    else if scene!.size.width == 375.0 {
+    else if scene!.size.width == 375.0
+    {
       LayerPosition = CGPoint(x: 7, y: -3)
     }
-    else if scene!.size.width == 414.0 {
+    else if scene!.size.width == 414.0
+    {
       LayerPosition = CGPoint(x: 10, y: -3)
     }
-    else {
+    else
+    {
       LayerPosition = CGPoint(x: 0, y: 0)
     }
     
@@ -69,21 +73,114 @@ class GameScene: SKScene
     
     shapeLayer.position = LayerPosition
     gameLayer.addChild(shapeLayer)
-    
-    
+
     
     // run(SKAction.repeatForever(SKAction.playSoundFileNamed("theme.mp3", waitForCompletion: true)))
+    
+    sprinkles = Sprinkles()
+    sprinkles.delegate = self
+    sprinkles.beginGame()
+    
+    tick = didTick
   }
   
-  required init(coder aDecoder: NSCoder) {
-    fatalError("NSCoder not supported")
+  #if os(iOS) || os(tvOS)
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?)
+  {
+    if let touch = touches.first
+    {
+      touchStartPoint = touch.location(in: self)
+    }
   }
   
-  func playSound(_ sound:String) {
+  override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?)
+  {
+    guard let start = touchStartPoint else { return }
+    
+    if let touch = touches.first
+    {
+      let end = touch.location(in: self)
+      
+      // Compute the distance between the two touches
+      let dx = pow(end.x - start.x, 2)
+      let dy = pow(end.y - start.y, 2)
+      let distance = sqrt(dx + dy)
+      
+      // If it's less then our min distance, then it's a swipe
+      if distance > minSwipeDistance
+      {
+        let xMove = end.x - start.x
+        
+        // It moved left or right
+        if abs(xMove) > minSwipeDistance
+        {
+          if xMove > 0
+          {
+            sprinkles.moveShapeRight()
+          }
+          else
+          {
+            sprinkles.moveShapeLeft()
+          }
+        }
+        else
+        {
+          // sprinkles.moveShapeDown()
+          sprinkles.dropShape()
+        }
+        
+        touchStartPoint = nil
+        touchMoved = true
+      }
+    }
+  }
+  
+  override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?)
+  {
+    if touchMoved == false
+    {
+      print("tap event")
+      self.sprinkles.rotateShape()
+      playSound("rotate.wav")
+    }
+
+    touchStartPoint = nil
+    touchMoved = false
+  }
+  #endif
+  
+  #if os(OSX)
+  override func keyDown(with event: NSEvent)
+  {
+    let keyCode = event.keyCode
+    
+    switch keyCode
+    {
+    case 123 :
+      sprinkles.moveShapeLeft()
+      break
+    case 124 :
+      sprinkles.moveShapeRight()
+      break
+    case 125 :
+      sprinkles.dropShape()
+      break
+    case 126 :
+      sprinkles.rotateShape()
+      break
+    default :
+      break
+    }
+  }
+  #endif
+  
+  func playSound(_ sound:String)
+  {
     run(SKAction.playSoundFileNamed(sound, waitForCompletion: false))
   }
   
-  override func update(_ currentTime: TimeInterval) {
+  override func update(_ currentTime: TimeInterval)
+  {
     /* Called before each frame is rendered */
     guard let lastTick = lastTick else {
       return
@@ -126,7 +223,6 @@ class GameScene: SKScene
       shapeLayer.addChild(sprite)
       
       let moveAction = SKAction.move(to: pointForColumn(block.column, row: block.row), duration: 0.2)
-//    let moveAction = SKAction.move(to: CGPoint(x: scene!.frame.width * 0.8, y: -(scene!.frame.height * 0.2)), duration: 0.2)
       moveAction.timingMode = .easeOut
       let fadeInAction = SKAction.fadeAlpha(to: 0.7, duration: 0.2)
       fadeInAction.timingMode = .easeOut
@@ -211,7 +307,7 @@ class GameScene: SKScene
         #endif
         
         
-        let archAction = SKAction.follow(archPath.CGPath, asOffset: false, orientToPath: true, duration: randomDuration)
+        let archAction = SKAction.follow(archPath.cgPath, asOffset: false, orientToPath: true, duration: randomDuration)
         archAction.timingMode = .easeIn
         let sprite = block.sprite!
         sprite.zPosition = 100
@@ -224,4 +320,107 @@ class GameScene: SKScene
     
     run(SKAction.wait(forDuration: longestDuration), completion:completion)
   }
+  
+  func nextShape()
+  {
+    let newShapes = sprinkles.newShape()
+    
+    guard let fallingShape = newShapes.fallingShape else {
+      return
+    }
+    
+    self.addPreviewShapeToScene(newShapes.nextShape!) {}
+    self.movePreviewShape(fallingShape) {
+      // self.view.isUserInteractionEnabled = true
+      self.startTicking()
+    }
+  }
+  
+  func didTick()
+  {
+    sprinkles.letShapeFall()
+  }
+  
+  // Sprinkle Protocol Methods
+  func gameDidBegin(sprinkles: Sprinkles)
+  {
+    // levelLabel.text = "\(sprinkles.level)"
+    // scoreLabel.text = "\(sprinkles.score)"
+    
+    // The following is false when restarting a new game
+    if sprinkles.nextShape != nil && sprinkles.nextShape!.blocks[0].sprite == nil
+    {
+      addPreviewShapeToScene(sprinkles.nextShape!) {
+        self.nextShape()
+      }
+    }
+    else
+    {
+      nextShape()
+    }
+  }
+  
+  func gameDidEnd(sprinkles: Sprinkles)
+  {
+    // self.view.isUserInteractionEnabled = true
+    stopTicking()
+    playSound("game-over.wav")
+    animateCollapsingLines(sprinkles.removeAllBlocks(), fallenBlocks: sprinkles.removeAllBlocks()) {
+      sprinkles.beginGame()
+    }
+  }
+  
+  func gameDidLevelUp(sprinkles: Sprinkles)
+  {
+    // levelLabel.text = "\(sprinkles.level)"
+    
+    if tickLengthMillis >= 100
+    {
+      tickLengthMillis -= 100
+    }
+    else if tickLengthMillis > 50
+    {
+      tickLengthMillis -= 50
+    }
+    
+    playSound("level-up.wav")
+  }
+  
+  func gameShapeDidDrop(sprinkles: Sprinkles)
+  {
+    stopTicking()
+    redrawShape(sprinkles.fallingShape!) {
+      sprinkles.letShapeFall()
+    }
+    
+    playSound("thud-loud.wav")
+  }
+  
+  func gameShapeDidLand(sprinkles: Sprinkles)
+  {
+    stopTicking()
+    // self.view.isUserInteractionEnabled = false
+    
+    let removedLines = sprinkles.removeCompletedLines()
+    
+    if removedLines.linesRemoved.count > 0
+    {
+      // self.scoreLabel.text = "\(sprinkles.score)"
+      animateCollapsingLines(removedLines.linesRemoved, fallenBlocks:removedLines.fallenBlocks) {
+        self.gameShapeDidLand(sprinkles: sprinkles)
+      }
+      
+      playSound("sparkle.wav")
+    }
+    else
+    {
+      nextShape()
+    }
+  }
+  
+  func gameShapeDidMove(sprinkles: Sprinkles)
+  {
+    redrawShape(sprinkles.fallingShape!) {}
+  }
+  
 }

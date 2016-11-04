@@ -3,7 +3,7 @@ import AppKit
 extension NSBezierPath
 {
   
-  var CGPath: CGPath {    
+  var cgPath: CGPath {
     get {
       return self.transformToCGPath()
     }
@@ -52,4 +52,5 @@ extension NSBezierPath
     points.deallocate(capacity: 3)
     return path
   }
+  
 }
