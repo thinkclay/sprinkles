@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6FB393E71DD2A4C10092420A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6FB393E61DD2A4C10092420A /* Main.storyboard */; };
 		6FB984241D9E220500881CDF /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB984231D9E220500881CDF /* Shape.swift */; };
 		6FB984251D9E220500881CDF /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB984231D9E220500881CDF /* Shape.swift */; };
 		6FB984261D9E220500881CDF /* Shape.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB984231D9E220500881CDF /* Shape.swift */; };
@@ -34,7 +35,6 @@
 		6FB984441D9E288400881CDF /* Sprinkles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB984431D9E288400881CDF /* Sprinkles.swift */; };
 		6FB984451D9E288400881CDF /* Sprinkles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB984431D9E288400881CDF /* Sprinkles.swift */; };
 		6FB984461D9E288400881CDF /* Sprinkles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6FB984431D9E288400881CDF /* Sprinkles.swift */; };
-		6FB984491D9E32A500881CDF /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 6FB984481D9E32A500881CDF /* Main.storyboard */; };
 		6FB984501D9E401500881CDF /* squeak-medium.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6FB9844B1D9E401500881CDF /* squeak-medium.wav */; };
 		6FB984511D9E401500881CDF /* squeak-medium.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6FB9844B1D9E401500881CDF /* squeak-medium.wav */; };
 		6FB984521D9E401500881CDF /* squeak-medium.wav in Resources */ = {isa = PBXBuildFile; fileRef = 6FB9844B1D9E401500881CDF /* squeak-medium.wav */; };
@@ -93,6 +93,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		6FB393E61DD2A4C10092420A /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 		6FB984231D9E220500881CDF /* Shape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = Shape.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		6FB984271D9E24AD00881CDF /* SquareShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = SquareShape.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		6FB9842B1D9E253200881CDF /* TShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TShape.swift; sourceTree = "<group>"; };
@@ -102,7 +103,6 @@
 		6FB9843B1D9E261400881CDF /* SShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = SShape.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		6FB9843F1D9E263900881CDF /* ZShape.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ZShape.swift; sourceTree = "<group>"; };
 		6FB984431D9E288400881CDF /* Sprinkles.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Sprinkles.swift; sourceTree = "<group>"; };
-		6FB984471D9E32A500881CDF /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		6FB9844B1D9E401500881CDF /* squeak-medium.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "squeak-medium.wav"; sourceTree = "<group>"; };
 		6FB9844D1D9E401500881CDF /* rotate.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = rotate.wav; sourceTree = "<group>"; };
 		6FB9844E1D9E401500881CDF /* thud-loud.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = "thud-loud.wav"; sourceTree = "<group>"; };
@@ -229,7 +229,7 @@
 			children = (
 				6FBAD49A1D9DED310024A5F5 /* AppDelegate.swift */,
 				6FBAD49C1D9DED310024A5F5 /* GameViewController.swift */,
-				6FB984481D9E32A500881CDF /* Main.storyboard */,
+				6FB393E61DD2A4C10092420A /* Main.storyboard */,
 				6FBAD4A11D9DED310024A5F5 /* LaunchScreen.storyboard */,
 				6FBAD4A41D9DED310024A5F5 /* Info.plist */,
 			);
@@ -383,12 +383,12 @@
 				6FB984561D9E401500881CDF /* rotate.wav in Resources */,
 				6FB984591D9E401500881CDF /* thud-loud.wav in Resources */,
 				6FBAD4EE1D9DF77D0024A5F5 /* Sprites.atlas in Resources */,
+				6FB393E71DD2A4C10092420A /* Main.storyboard in Resources */,
 				6FBAD4A31D9DED310024A5F5 /* LaunchScreen.storyboard in Resources */,
 				6FB984FB1D9F4ECD00881CDF /* level-up.wav in Resources */,
 				6FBAD4CA1D9DED310024A5F5 /* Assets.xcassets in Resources */,
 				6FB984501D9E401500881CDF /* squeak-medium.wav in Resources */,
 				6FB984F71D9F4E4500881CDF /* game-over.wav in Resources */,
-				6FB984491D9E32A500881CDF /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -505,15 +505,6 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
-		6FB984481D9E32A500881CDF /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				6FB984471D9E32A500881CDF /* Base */,
-			);
-			name = Main.storyboard;
-			path = "../../../Downloads/Chrome/swiftris-master/Swiftris";
-			sourceTree = "<group>";
-		};
 		6FBAD4A11D9DED310024A5F5 /* LaunchScreen.storyboard */ = {
 			isa = PBXVariantGroup;
 			children = (
